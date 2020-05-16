@@ -1,5 +1,7 @@
 # ENVLogger
 
+![ENVLogger](https://raw.githubusercontent.com/oxullo/envlogger/master/docs/envlogger-v1-ra.jpg)
+
 Versatile hardware for logging/controlling environmental conditions.
 
 Currently equipping:
