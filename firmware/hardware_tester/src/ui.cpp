@@ -38,10 +38,14 @@ static const uint8_t LCD_BLIGHT_PIN = TX;
 static const uint8_t BUTTON1_PIN = 5;
 static const uint8_t BUTTON2_PIN = 6;
 
+static const uint32_t BACKLIGHT_OFF_PERIOD = 10000;
+
 #define ST7565_HSPI
 
 
 static ST7565 glcd(LCD_SI_PIN, LCD_SCL_PIN, LCD_A0_PIN, LCD_RST_PIN, LCD_CS1_PIN);
+static uint32_t ts_last_press = 0;
+
 
 void ui_backlight_enable(bool on)
 {
@@ -60,6 +64,14 @@ void ui_backlight_enable(bool on)
     }
 }
 
+void check_backlight()
+{
+    if (ts_last_press && millis() - ts_last_press > BACKLIGHT_OFF_PERIOD) {
+        ui_backlight_enable(false);
+        ts_last_press = 0;
+    }
+}
+
 void ui_init()
 {
     pinMode(BUTTON1_PIN, INPUT_PULLUP);
@@ -73,6 +85,8 @@ void ui_init()
     glcd.drawstring(0, 0, "ENVLOGGER v1");
     glcd.drawstring(0, 1, "Hardware test");
     glcd.display();
+
+    ts_last_press = millis();
 }
 
 void ui_update()
@@ -99,4 +113,13 @@ void ui_update()
     glcd.drawstring(0, 3, s.c_str());
 
     glcd.display();
+
+    if (digitalRead(BUTTON1_PIN) == LOW || digitalRead(BUTTON2_PIN) == LOW) {
+        if (ts_last_press == 0) {
+            ui_backlight_enable(true);
+        }
+        ts_last_press = millis();
+    }
+
+    check_backlight();
 }
