@@ -21,9 +21,21 @@
 #ifndef MCP9601_H
 #define MCP9601_H
 
+const uint8_t MCP9601_STATUS_THU = 1 << 6;
+const uint8_t MCP9601_STATUS_SC = 1 << 5;
+const uint8_t MCP9601_STATUS_OC = 1 << 4;
+
+typedef struct TCData {
+    float temperature;
+    uint8_t valid;
+} TCData;
+
+
 void mcp9601_init();
 void mcp9601_update();
+void mcp9601_dump();
 float mcp9601_get_cj(uint8_t dev_id);
 float mcp9601_get_hj(uint8_t dev_id);
+TCData* mcp9601_get_tcdata(uint8_t dev_id);
 
 #endif

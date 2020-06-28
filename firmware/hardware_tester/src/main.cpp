@@ -53,7 +53,10 @@ void setup()
 void loop()
 {
     envsensor_update();
+
     mcp9601_update();
+    mcp9601_dump();
+
     Serial.println("--------");
 
     ui_update();

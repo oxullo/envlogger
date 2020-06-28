@@ -79,6 +79,7 @@ void ui_update()
 {
     glcd.clear();
     String s;
+    TCData* tcd;
 
     s = String("Ta=") + String(envsensor_get_ta(), 2) + "C Pa=" + String(envsensor_get_pa(), 2) + "hPa"; 
     glcd.drawstring(0, 0, s.c_str());
@@ -86,7 +87,12 @@ void ui_update()
     s = String("RH=") + String(envsensor_get_rh(), 2) + "% Vr=" + String(envsensor_get_vocr(), 2) + "k"; 
     glcd.drawstring(0, 1, s.c_str());
 
-    s = String("TC1=") + String(mcp9601_get_hj(0), 2) + "C TC2=" + String(mcp9601_get_hj(1), 2) + "C"; 
+    s = String("TC1=");    
+    tcd = mcp9601_get_tcdata(0);
+    s += tcd->valid ? (String(tcd->temperature, 2) + "C") : "N/A";
+    s += " TC2=";
+    tcd = mcp9601_get_tcdata(1);
+    s += tcd->valid ? (String(tcd->temperature, 2) + "C") : "N/A";
     glcd.drawstring(0, 2, s.c_str());
 
     s = String("B1=") + digitalRead(BUTTON1_PIN) + " B2=" + digitalRead(BUTTON2_PIN);
