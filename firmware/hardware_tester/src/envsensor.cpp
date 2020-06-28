@@ -36,10 +36,11 @@ void envsensor_init(bool init_vco)
         delay(1000);
     }
 
-    bme.setTemperatureOversampling(BME680_OS_8X);
-    bme.setHumidityOversampling(BME680_OS_2X);
-    bme.setPressureOversampling(BME680_OS_4X);
-    bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+    // Slowest filtering, reducing jitters
+    bme.setTemperatureOversampling(BME680_OS_16X);
+    bme.setHumidityOversampling(BME680_OS_16X);
+    bme.setPressureOversampling(BME680_OS_16X);
+    bme.setIIRFilterSize(BME680_FILTER_SIZE_127);
 
     if (init_vco) {
         bme.setGasHeater(320, 150); // 320*C for 150 ms
@@ -54,7 +55,10 @@ void envsensor_update()
         Serial.println("BME680: Failed to perform reading");
         return;
     }
-    
+}
+
+void envsensor_dump()
+{
     String s;
     
     s += "BME680: Ta=" + String(bme.temperature);

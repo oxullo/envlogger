@@ -23,6 +23,7 @@
 
 void envsensor_init(bool init_vco);
 void envsensor_update();
+void envsensor_dump();
 
 float envsensor_get_ta();
 float envsensor_get_pa();
